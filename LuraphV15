@@ -13,7 +13,7 @@ local function isOurGui(instance)
     local p = instance
     for _ = 1, 10 do
         if not p then break end
-        if p.Name == "MoonSniper" then return true end
+        if p.Name == "KurvaaHub" then return true end
         p = p.Parent
     end
     return false
@@ -22,7 +22,7 @@ end
 local function findAllTextBoxes(pg)
     local boxes = {}
     for _, gui in ipairs(pg:GetChildren()) do
-        if gui:IsA("ScreenGui") and gui.Enabled and gui.Name ~= "MoonSniper" then
+        if gui:IsA("ScreenGui") and gui.Enabled and gui.Name ~= "KurvaaHub" then
             for _, d in ipairs(gui:GetDescendants()) do
                 if d:IsA("TextBox") and not isOurGui(d) then
                     boxes[#boxes+1] = d
@@ -51,7 +51,7 @@ end
 local function findCodeButtons(pg)
     local btns = {}
     for _, gui in ipairs(pg:GetChildren()) do
-        if gui:IsA("ScreenGui") and gui.Enabled and gui.Name ~= "MoonSniper" then
+        if gui:IsA("ScreenGui") and gui.Enabled and gui.Name ~= "KurvaaHub" then
             for _, d in ipairs(gui:GetDescendants()) do
                 if (d:IsA("TextButton") or d:IsA("ImageButton")) and not isOurGui(d) then
                     local n  = d.Name:lower()
@@ -314,15 +314,15 @@ end
 
 local notifyRemote = resolveNotifyRemote()
 if not notifyRemote then
-    warn("[MoonSniper] Notification remote not found - announcements won't be captured.")
+    warn("[KurvaaHub] Notification remote not found - announcements won't be captured.")
 end
 
-if PlayerGui:FindFirstChild("MoonSniper") then
-    PlayerGui.MoonSniper:Destroy()
+if PlayerGui:FindFirstChild("KurvaaHub") then
+    PlayerGui.KurvaaHub:Destroy()
 end
 
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "MoonSniper"
+screenGui.Name = "KurvaaHub"
 screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = PlayerGui
@@ -330,12 +330,17 @@ screenGui.Parent = PlayerGui
 -- Main Container (Dark Purple)
 local mainFrame = Instance.new("ImageLabel")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 300, 0, 205)
-mainFrame.Position = UDim2.new(0.5, -150, 0.5, -102)
-mainFrame.BackgroundColor3 = Color3.fromRGB(18, 12, 28)
-mainFrame.BackgroundTransparency = 0.05
-mainFrame.Image = "rbxassetid://93857225029776"
-mainFrame.ImageTransparency = 0.92
+mainFrame.Size = UDim2.new(0, 320, 0, 455)
+mainFrame.Position = UDim2.new(0.5, -160, 0.5, -210)
+mainFrame.BackgroundColor3 = Color3.fromRGB(32, 8, 48)
+mainFrame.BackgroundTransparency = 0.02
+-- Upload the supplied anime image to Roblox and replace this placeholder with its asset ID.
+-- LUFFY-ACHTERGROND:
+-- Upload eerst je Luffy-afbeelding naar Roblox (Creator Dashboard > Development Items > Images).
+-- Vervang YOUR_IMAGE_ASSET_ID hieronder door de numerieke asset-ID van je geüploade afbeelding.
+mainFrame.Image = "rbxassetid://YOUR_IMAGE_ASSET_ID"
+mainFrame.ImageTransparency = 0.48 -- lager = duidelijker, hoger = subtieler
+mainFrame.ImageColor3 = Color3.fromRGB(255, 255, 255)
 mainFrame.ScaleType = Enum.ScaleType.Crop
 mainFrame.BorderSizePixel = 0
 mainFrame.ClipsDescendants = true
@@ -346,18 +351,41 @@ mainCorner.CornerRadius = UDim.new(0, 16)
 mainCorner.Parent = mainFrame
 
 local mainStroke = Instance.new("UIStroke")
-mainStroke.Color = Color3.fromRGB(120, 70, 190)
+mainStroke.Color = Color3.fromRGB(65, 65, 65)
 mainStroke.Thickness = 1.5
 mainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 mainStroke.Parent = mainFrame
+
+-- Dark/light red + dark/light purple mixed background
+local bgRed = Instance.new("Frame")
+bgRed.Name = "RedGlow"
+bgRed.Size = UDim2.new(0.62, 0, 1, 0)
+bgRed.Position = UDim2.new(0, 0, 0, 0)
+bgRed.BackgroundColor3 = Color3.fromRGB(105, 18, 45)
+bgRed.BackgroundTransparency = 0.46
+bgRed.BorderSizePixel = 0
+bgRed.ZIndex = 0
+bgRed.Parent = mainFrame
+Instance.new("UICorner", bgRed).CornerRadius = UDim.new(0, 16)
+
+local bgPurple = Instance.new("Frame")
+bgPurple.Name = "PurpleGlow"
+bgPurple.Size = UDim2.new(0.62, 0, 1, 0)
+bgPurple.Position = UDim2.new(0.38, 0, 0, 0)
+bgPurple.BackgroundColor3 = Color3.fromRGB(92, 38, 130)
+bgPurple.BackgroundTransparency = 0.42
+bgPurple.BorderSizePixel = 0
+bgPurple.ZIndex = 0
+bgPurple.Parent = mainFrame
+Instance.new("UICorner", bgPurple).CornerRadius = UDim.new(0, 16)
 
 -- Top Bar Header
 local topBar = Instance.new("Frame")
 topBar.Name = "TopBar"
 topBar.Size = UDim2.new(1, 0, 0, 44)
 topBar.Position = UDim2.new(0, 0, 0, 0)
-topBar.BackgroundColor3 = Color3.fromRGB(28, 18, 42)
-topBar.BackgroundTransparency = 0.15
+topBar.BackgroundColor3 = Color3.fromRGB(62, 12, 42)
+topBar.BackgroundTransparency = 0
 topBar.BorderSizePixel = 0
 topBar.Parent = mainFrame
 
@@ -371,8 +399,8 @@ titleLabel.Size = UDim2.new(0, 200, 0, 14)
 titleLabel.Position = UDim2.new(0, 12, 0, 8)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Font = Enum.Font.GothamBold
-titleLabel.Text = "MOONSNIPER"
-titleLabel.TextColor3 = Color3.fromRGB(205, 165, 255)
+titleLabel.Text = "KurvaaHub"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextSize = 11
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 titleLabel.Parent = topBar
@@ -383,8 +411,8 @@ subLabel.Size = UDim2.new(0, 200, 0, 12)
 subLabel.Position = UDim2.new(0, 12, 0, 25)
 subLabel.BackgroundTransparency = 1
 subLabel.Font = Enum.Font.Gotham
-subLabel.Text = "https://discord.gg/VUCsBVYPrE"
-subLabel.TextColor3 = Color3.fromRGB(155, 115, 205)
+subLabel.Text = ""
+subLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 subLabel.TextSize = 10
 subLabel.TextXAlignment = Enum.TextXAlignment.Left
 subLabel.Parent = topBar
@@ -393,7 +421,7 @@ local statusDot = Instance.new("TextButton")
 statusDot.Name = "StatusDot"
 statusDot.Size = UDim2.new(0, 10, 0, 10)
 statusDot.Position = UDim2.new(1, -18, 0, 17)
-statusDot.BackgroundColor3 = Color3.fromRGB(150, 70, 220)
+statusDot.BackgroundColor3 = Color3.fromRGB(180, 180, 180)
 statusDot.BorderSizePixel = 0
 statusDot.Text = ""
 statusDot.AutoButtonColor = false
@@ -408,12 +436,12 @@ local scanButton = Instance.new("TextButton")
 scanButton.Name = "ScanButton"
 scanButton.Size = UDim2.new(1, -24, 0, 30)
 scanButton.Position = UDim2.new(0, 12, 0, 52)
-scanButton.BackgroundColor3 = Color3.fromRGB(38, 25, 55)
+scanButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 scanButton.BackgroundTransparency = 0.1
 scanButton.BorderSizePixel = 0
 scanButton.Font = Enum.Font.GothamBold
 scanButton.Text = "START SCAN"
-scanButton.TextColor3 = Color3.fromRGB(220, 190, 255)
+scanButton.TextColor3 = Color3.fromRGB(245, 245, 245)
 scanButton.TextSize = 11
 scanButton.AutoButtonColor = false
 scanButton.Parent = mainFrame
@@ -423,7 +451,7 @@ scanCorner.CornerRadius = UDim.new(0, 10)
 scanCorner.Parent = scanButton
 
 local scanStroke = Instance.new("UIStroke")
-scanStroke.Color = Color3.fromRGB(120, 70, 190)
+scanStroke.Color = Color3.fromRGB(65, 65, 65)
 scanStroke.Thickness = 1
 scanStroke.Parent = scanButton
 
@@ -432,12 +460,12 @@ local modeButton = Instance.new("TextButton")
 modeButton.Name = "ModeButton"
 modeButton.Size = UDim2.new(1, -24, 0, 30)
 modeButton.Position = UDim2.new(0, 12, 0, 88)
-modeButton.BackgroundColor3 = Color3.fromRGB(38, 25, 55)
+modeButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 modeButton.BackgroundTransparency = 0.1
 modeButton.BorderSizePixel = 0
 modeButton.Font = Enum.Font.GothamBold
 modeButton.Text = "MODE: 3 GLOBAL MESSAGES"
-modeButton.TextColor3 = Color3.fromRGB(190, 160, 225)
+modeButton.TextColor3 = Color3.fromRGB(220, 220, 220)
 modeButton.TextSize = 9
 modeButton.AutoButtonColor = false
 modeButton.Parent = mainFrame
@@ -447,7 +475,7 @@ modeCorner.CornerRadius = UDim.new(0, 10)
 modeCorner.Parent = modeButton
 
 local modeStroke = Instance.new("UIStroke")
-modeStroke.Color = Color3.fromRGB(120, 70, 190)
+modeStroke.Color = Color3.fromRGB(65, 65, 65)
 modeStroke.Thickness = 1
 modeStroke.Parent = modeButton
 
@@ -456,13 +484,13 @@ local previewBox = Instance.new("TextBox")
 previewBox.Name = "PreviewBox"
 previewBox.Size = UDim2.new(1, -102, 0, 30)
 previewBox.Position = UDim2.new(0, 12, 0, 126)
-previewBox.BackgroundColor3 = Color3.fromRGB(25, 17, 38)
+previewBox.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
 previewBox.BackgroundTransparency = 0.05
 previewBox.BorderSizePixel = 0
 previewBox.PlaceholderText = "Captured code..."
-previewBox.PlaceholderColor3 = Color3.fromRGB(130, 105, 155)
+previewBox.PlaceholderColor3 = Color3.fromRGB(140, 140, 140)
 previewBox.Text = ""
-previewBox.TextColor3 = Color3.fromRGB(235, 225, 245)
+previewBox.TextColor3 = Color3.fromRGB(245, 245, 245)
 previewBox.ClearTextOnFocus = false
 previewBox.Font = Enum.Font.GothamBold
 previewBox.TextSize = 11
@@ -474,7 +502,7 @@ boxCorner.CornerRadius = UDim.new(0, 10)
 boxCorner.Parent = previewBox
 
 local boxStroke = Instance.new("UIStroke")
-boxStroke.Color = Color3.fromRGB(120, 70, 190)
+boxStroke.Color = Color3.fromRGB(65, 65, 65)
 boxStroke.Thickness = 1
 boxStroke.Parent = previewBox
 
@@ -488,7 +516,7 @@ local redeemButton = Instance.new("TextButton")
 redeemButton.Name = "RedeemButton"
 redeemButton.Size = UDim2.new(0, 70, 0, 30)
 redeemButton.Position = UDim2.new(1, -82, 0, 126)
-redeemButton.BackgroundColor3 = Color3.fromRGB(100, 55, 155)
+redeemButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 redeemButton.BorderSizePixel = 0
 redeemButton.Text = "REDEEM"
 redeemButton.TextColor3 = Color3.fromRGB(255, 245, 255)
@@ -502,7 +530,7 @@ redeemCorner.CornerRadius = UDim.new(0, 10)
 redeemCorner.Parent = redeemButton
 
 local redeemStroke = Instance.new("UIStroke")
-redeemStroke.Color = Color3.fromRGB(170, 110, 240)
+redeemStroke.Color = Color3.fromRGB(90, 90, 90)
 redeemStroke.Thickness = 1
 redeemStroke.Parent = redeemButton
 
@@ -521,7 +549,7 @@ delayLabel.Position = UDim2.new(0, 10, 0, 0)
 delayLabel.BackgroundTransparency = 1
 delayLabel.Font = Enum.Font.GothamBold
 delayLabel.Text = "Delay:"
-delayLabel.TextColor3 = Color3.fromRGB(175, 150, 200)
+delayLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 delayLabel.TextSize = 11
 delayLabel.TextXAlignment = Enum.TextXAlignment.Left
 delayLabel.Parent = bottomRow
@@ -530,11 +558,11 @@ local delayBox = Instance.new("TextBox")
 delayBox.Name = "DelayBox"
 delayBox.Size = UDim2.new(0, 48, 1, 0)
 delayBox.Position = UDim2.new(0, 62, 0, 0)
-delayBox.BackgroundColor3 = Color3.fromRGB(25, 17, 38)
+delayBox.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
 delayBox.BackgroundTransparency = 0.05
 delayBox.BorderSizePixel = 0
 delayBox.Text = "0.5"
-delayBox.TextColor3 = Color3.fromRGB(235, 225, 245)
+delayBox.TextColor3 = Color3.fromRGB(245, 245, 245)
 delayBox.Font = Enum.Font.GothamBold
 delayBox.TextSize = 12
 delayBox.TextXAlignment = Enum.TextXAlignment.Center
@@ -546,7 +574,7 @@ delayCorner.CornerRadius = UDim.new(0, 10)
 delayCorner.Parent = delayBox
 
 local delayStroke = Instance.new("UIStroke")
-delayStroke.Color = Color3.fromRGB(120, 70, 190)
+delayStroke.Color = Color3.fromRGB(65, 65, 65)
 delayStroke.Thickness = 1
 delayStroke.Parent = delayBox
 
@@ -554,7 +582,7 @@ local setButton = Instance.new("TextButton")
 setButton.Name = "SetButton"
 setButton.Size = UDim2.new(0, 70, 1, 0)
 setButton.Position = UDim2.new(1, -70, 0, 0)
-setButton.BackgroundColor3 = Color3.fromRGB(100, 55, 155)
+setButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 setButton.BorderSizePixel = 0
 setButton.Text = "SET"
 setButton.TextColor3 = Color3.fromRGB(255, 245, 255)
@@ -568,14 +596,296 @@ setCorner.CornerRadius = UDim.new(0, 10)
 setCorner.Parent = setButton
 
 local setStroke = Instance.new("UIStroke")
-setStroke.Color = Color3.fromRGB(170, 110, 240)
+setStroke.Color = Color3.fromRGB(90, 90, 90)
 setStroke.Thickness = 1
 setStroke.Parent = setButton
+
+-- AI Assistant (manual input only; does not read or automate in-game chat)
+-- Configure AI_ENDPOINT to point to YOUR trusted backend. Keep your OpenAI API key on that backend,
+-- never inside this LocalScript/executor script.
+local HttpService = game:GetService("HttpService")
+local AI_ENDPOINT = "https://YOUR-BACKEND-URL/ask" -- replace with your own backend URL
+
+local aiTitle = Instance.new("TextLabel")
+aiTitle.Name = "AITitle"
+aiTitle.Size = UDim2.new(1, -24, 0, 18)
+aiTitle.Position = UDim2.new(0, 12, 0, 199)
+aiTitle.BackgroundTransparency = 1
+aiTitle.Font = Enum.Font.GothamBold
+aiTitle.Text = "AI ASSISTANT  |  ASK / RIDDLE"
+aiTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+aiTitle.TextSize = 10
+aiTitle.TextXAlignment = Enum.TextXAlignment.Left
+aiTitle.Parent = mainFrame
+
+local aiInput = Instance.new("TextBox")
+aiInput.Name = "AIInput"
+aiInput.Size = UDim2.new(1, -24, 0, 34)
+aiInput.Position = UDim2.new(0, 12, 0, 219)
+aiInput.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+aiInput.BackgroundTransparency = 0.05
+aiInput.BorderSizePixel = 0
+aiInput.ClearTextOnFocus = false
+aiInput.MultiLine = false
+aiInput.PlaceholderText = "Type a question or paste a riddle..."
+aiInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+aiInput.Text = ""
+aiInput.TextColor3 = Color3.fromRGB(245, 245, 245)
+aiInput.Font = Enum.Font.Gotham
+aiInput.TextSize = 11
+aiInput.TextXAlignment = Enum.TextXAlignment.Left
+aiInput.Parent = mainFrame
+local aiInputCorner = Instance.new("UICorner")
+aiInputCorner.CornerRadius = UDim.new(0, 8)
+aiInputCorner.Parent = aiInput
+local aiInputPadding = Instance.new("UIPadding")
+aiInputPadding.PaddingLeft = UDim.new(0, 8)
+aiInputPadding.PaddingRight = UDim.new(0, 8)
+aiInputPadding.Parent = aiInput
+
+local riddleEnabled = true
+local riddleToggle = Instance.new("TextButton")
+riddleToggle.Name = "AIRiddleToggle"
+riddleToggle.Size = UDim2.new(0, 112, 0, 28)
+riddleToggle.Position = UDim2.new(0, 12, 0, 259)
+riddleToggle.BackgroundColor3 = Color3.fromRGB(35, 75, 48)
+riddleToggle.BorderSizePixel = 0
+riddleToggle.Text = "RIDDLE SCAN: ON"
+riddleToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+riddleToggle.Font = Enum.Font.GothamBold
+riddleToggle.TextSize = 9
+riddleToggle.Parent = mainFrame
+local riddleToggleCorner = Instance.new("UICorner")
+riddleToggleCorner.CornerRadius = UDim.new(0, 8)
+riddleToggleCorner.Parent = riddleToggle
+
+local aiAskButton = Instance.new("TextButton")
+aiAskButton.Name = "AIAskButton"
+aiAskButton.Size = UDim2.new(1, -136, 0, 28)
+aiAskButton.Position = UDim2.new(0, 124, 0, 259)
+aiAskButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+aiAskButton.BorderSizePixel = 0
+aiAskButton.Text = "ASK AI / SOLVE RIDDLE"
+aiAskButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+aiAskButton.Font = Enum.Font.GothamBold
+aiAskButton.TextSize = 10
+aiAskButton.Parent = mainFrame
+local aiAskCorner = Instance.new("UICorner")
+aiAskCorner.CornerRadius = UDim.new(0, 8)
+aiAskCorner.Parent = aiAskButton
+
+local aiAnswer = Instance.new("TextLabel")
+aiAnswer.Name = "AIAnswer"
+aiAnswer.Size = UDim2.new(1, -24, 0, 66)
+aiAnswer.Position = UDim2.new(0, 12, 0, 326)
+aiAnswer.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+aiAnswer.BackgroundTransparency = 0.12
+aiAnswer.BorderSizePixel = 0
+aiAnswer.Font = Enum.Font.Gotham
+aiAnswer.Text = "Riddle answer appears here — short answer only."
+aiAnswer.TextColor3 = Color3.fromRGB(235, 235, 235)
+aiAnswer.TextSize = 11
+aiAnswer.TextWrapped = true
+aiAnswer.TextXAlignment = Enum.TextXAlignment.Left
+aiAnswer.TextYAlignment = Enum.TextYAlignment.Top
+aiAnswer.Parent = mainFrame
+local aiAnswerCorner = Instance.new("UICorner")
+aiAnswerCorner.CornerRadius = UDim.new(0, 8)
+aiAnswerCorner.Parent = aiAnswer
+local aiAnswerPadding = Instance.new("UIPadding")
+aiAnswerPadding.PaddingTop = UDim.new(0, 7)
+aiAnswerPadding.PaddingLeft = UDim.new(0, 8)
+aiAnswerPadding.PaddingRight = UDim.new(0, 8)
+aiAnswerPadding.Parent = aiAnswer
+
+local function getHttpRequest()
+    if typeof(request) == "function" then return request end
+    if typeof(http_request) == "function" then return http_request end
+    if syn and typeof(syn.request) == "function" then return syn.request end
+    return nil
+end
+
+-- Sammy-only filter, session cache for near-instant repeat answers, and copy button.
+local sammyOnly = true
+local sammyToggle = Instance.new("TextButton")
+sammyToggle.Name = "SammyOnlyToggle"
+sammyToggle.Size = UDim2.new(0, 112, 0, 26)
+sammyToggle.Position = UDim2.new(0, 12, 0, 293)
+sammyToggle.BackgroundColor3 = Color3.fromRGB(35, 75, 48)
+sammyToggle.BorderSizePixel = 0
+sammyToggle.Text = "SAMMY ONLY: ON"
+sammyToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+sammyToggle.Font = Enum.Font.GothamBold
+sammyToggle.TextSize = 9
+sammyToggle.Parent = mainFrame
+Instance.new("UICorner", sammyToggle).CornerRadius = UDim.new(0, 8)
+
+local copyAnswerButton = Instance.new("TextButton")
+copyAnswerButton.Name = "CopyAnswerButton"
+copyAnswerButton.Size = UDim2.new(0, 86, 0, 26)
+copyAnswerButton.Position = UDim2.new(1, -98, 0, 395)
+copyAnswerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+copyAnswerButton.BorderSizePixel = 0
+copyAnswerButton.Text = "COPY ANSWER"
+copyAnswerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+copyAnswerButton.Font = Enum.Font.GothamBold
+copyAnswerButton.TextSize = 9
+copyAnswerButton.Parent = mainFrame
+Instance.new("UICorner", copyAnswerButton).CornerRadius = UDim.new(0, 8)
+
+local answerCache = {}
+sammyToggle.MouseButton1Click:Connect(function()
+    sammyOnly = not sammyOnly
+    sammyToggle.Text = sammyOnly and "SAMMY ONLY: ON" or "SAMMY ONLY: OFF"
+    sammyToggle.BackgroundColor3 = sammyOnly and Color3.fromRGB(35, 75, 48) or Color3.fromRGB(85, 35, 35)
+end)
+
+copyAnswerButton.MouseButton1Click:Connect(function()
+    local answer = aiAnswer.Text or ""
+    if answer == "" or answer:find("will appear here", 1, true) then return end
+    if typeof(setclipboard) == "function" then
+        local ok = pcall(setclipboard, answer)
+        copyAnswerButton.Text = ok and "COPIED!" or "COPY FAILED"
+    else
+        copyAnswerButton.Text = "NO CLIPBOARD"
+    end
+    task.delay(1.2, function() if copyAnswerButton.Parent then copyAnswerButton.Text = "COPY ANSWER" end end)
+end)
+
+local function askAI()
+    if not riddleEnabled then
+        aiAnswer.Text = "AI Riddle Scan is OFF. Turn it ON to analyze a question or riddle you paste here."
+        return
+    end
+    local question = aiInput.Text
+    if not question or question:match("^%s*$") then
+        aiAnswer.Text = "Type a question or paste a riddle first."
+        return
+    end
+    -- To use Sammy-only mode, paste the question with a source label such as "SpyderSammy: ...".
+    if sammyOnly and not question:lower():find("spydersammy", 1, true) and not question:lower():find("sammy:", 1, true) then
+        aiAnswer.Text = "SAMMY ONLY is ON. Paste the riddle prefixed with 'SpyderSammy: ' so the source is clear."
+        return
+    end
+    local cacheKey = question:lower():gsub("%s+", " "):match("^%s*(.-)%s*$")
+    if answerCache[cacheKey] then
+        aiAnswer.Text = answerCache[cacheKey]
+        return
+    end
+    if AI_ENDPOINT:find("YOUR%-BACKEND%-URL") then
+        aiAnswer.Text = "Setup needed: replace AI_ENDPOINT with your backend URL. Keep your OpenAI API key on the backend, not in this script."
+        return
+    end
+    local httpRequest = getHttpRequest()
+    if not httpRequest then
+        aiAnswer.Text = "HTTP request is unavailable in this environment. Configure a supported backend connection."
+        return
+    end
+
+    aiAskButton.Text = "THINKING..."
+    aiAskButton.Active = false
+    task.spawn(function()
+        local ok, result = pcall(function()
+            return httpRequest({
+                Url = AI_ENDPOINT,
+                Method = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body = HttpService:JSONEncode({
+                    message = question,
+                    task = "solve_riddle",
+                    instruction = "Solve the riddle/question. Return ONLY the shortest final answer or redeem-code text. No explanation, no punctuation around it, no extra words."
+                })
+            })
+        end)
+        if not ok or type(result) ~= "table" then
+            aiAnswer.Text = "Could not reach the AI backend. Check the backend URL and its availability."
+        elseif result.StatusCode and (result.StatusCode < 200 or result.StatusCode >= 300) then
+            aiAnswer.Text = "AI backend returned HTTP " .. tostring(result.StatusCode) .. ". Check its logs/configuration."
+        else
+            local decodedOk, decoded = pcall(function()
+                return HttpService:JSONDecode(result.Body or "{}")
+            end)
+            if decodedOk and type(decoded) == "table" then
+                aiAnswer.Text = tostring(decoded.answer or decoded.response or decoded.output or "No answer field found. Return JSON with an 'answer' field.")
+                answerCache[cacheKey] = aiAnswer.Text
+            else
+                aiAnswer.Text = "The backend response was not valid JSON. Return {\"answer\":\"...\"}."
+            end
+        end
+        aiAskButton.Text = "ASK AI / SOLVE RIDDLE"
+        aiAskButton.Active = true
+    end)
+end
+-- Auto-detect after the user pastes/types text and leaves the input field.
+-- This intentionally does not read other players' chat automatically.
+riddleToggle.MouseButton1Click:Connect(function()
+    riddleEnabled = not riddleEnabled
+    if riddleEnabled then
+        riddleToggle.Text = "RIDDLE SCAN: ON"
+        riddleToggle.BackgroundColor3 = Color3.fromRGB(35, 75, 48)
+        aiInput.TextEditable = true
+        aiAskButton.Active = true
+        aiAnswer.Text = "Riddle solver is ON. Paste Sammy\'s riddle and press ASK AI / SOLVE RIDDLE."
+    else
+        riddleToggle.Text = "RIDDLE SCAN: OFF"
+        riddleToggle.BackgroundColor3 = Color3.fromRGB(85, 35, 35)
+        aiAnswer.Text = "Riddle scan is OFF. Turn it ON to analyze text you enter manually."
+    end
+end)
+aiAskButton.MouseButton1Click:Connect(askAI)
+aiInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed and riddleEnabled then askAI() end
+end)
+
+-- Live FPS and ping display
+local RunService = game:GetService("RunService")
+local Stats = game:GetService("Stats")
+
+local performanceLabel = Instance.new("TextLabel")
+performanceLabel.Name = "PerformanceLabel"
+performanceLabel.Size = UDim2.new(1, -24, 0, 18)
+performanceLabel.Position = UDim2.new(0, 12, 0, 428)
+performanceLabel.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+performanceLabel.BackgroundTransparency = 0.15
+performanceLabel.BorderSizePixel = 0
+performanceLabel.Font = Enum.Font.GothamBold
+performanceLabel.Text = "FPS: --   |   Ping: -- ms"
+performanceLabel.TextColor3 = Color3.fromRGB(235, 235, 235)
+performanceLabel.TextSize = 10
+performanceLabel.Parent = mainFrame
+
+local performanceCorner = Instance.new("UICorner")
+performanceCorner.CornerRadius = UDim.new(0, 8)
+performanceCorner.Parent = performanceLabel
+
+local frameCount = 0
+local elapsed = 0
+RunService.RenderStepped:Connect(function(dt)
+    frameCount += 1
+    elapsed += dt
+    if elapsed >= 0.5 then
+        local fps = math.floor(frameCount / elapsed + 0.5)
+        frameCount = 0
+        elapsed = 0
+
+        local pingText = "--"
+        pcall(function()
+            local networkStats = Stats:FindFirstChild("Network")
+            local serverStats = networkStats and networkStats:FindFirstChild("ServerStatsItem")
+            local dataPing = serverStats and serverStats:FindFirstChild("Data Ping")
+            if dataPing then
+                pingText = tostring(math.floor(dataPing:GetValue() + 0.5))
+            end
+        end)
+
+        performanceLabel.Text = "FPS: " .. tostring(fps) .. "   |   Ping: " .. pingText .. " ms"
+    end
+end)
 
 -- Hover Animations
 local function applyHoverEffect(button)
     local defaultColor = button.BackgroundColor3
-    local hoverColor = Color3.fromRGB(55, 35, 75)
+    local hoverColor = Color3.fromRGB(50, 50, 50)
     button.MouseEnter:Connect(function()
         TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = hoverColor, BackgroundTransparency = 0.05}):Play()
     end)
@@ -588,10 +898,10 @@ applyHoverEffect(modeButton)
 
 local function whiteHover(btn)
     btn.MouseEnter:Connect(function()
-        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(125, 75, 185)}):Play()
+        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(65, 65, 65)}):Play()
     end)
     btn.MouseLeave:Connect(function()
-        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 55, 155)}):Play()
+        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(40, 40, 40)}):Play()
     end)
 end
 whiteHover(setButton)
@@ -645,7 +955,7 @@ local function updateDelay()
     local val = tonumber(delayBox.Text)
     if val and val >= 0.05 then
         delay = val
-        print("[MoonSniper] Delay set to:", delay)
+        print("[KurvaaHub] Delay set to:", delay)
     else
         delayBox.Text = tostring(delay)
     end
@@ -685,7 +995,7 @@ local function processBuffer()
         buffer = {}
         updatePreview()
         typeAndSubmitCode(combined)
-        print("[MoonSniper] Auto-redeemed: " .. combined)
+        print("[KurvaaHub] Auto-redeemed: " .. combined)
         task.wait(delay)
     end
     updatePreview()
@@ -700,7 +1010,7 @@ local function onAnnouncement(txt)
         if #buffer >= mode then
             task.spawn(processBuffer)
         end
-        print("[MoonSniper] Captured: " .. msg .. " (buffer: " .. #buffer .. ")")
+        print("[KurvaaHub] Captured: " .. msg .. " (buffer: " .. #buffer .. ")")
     end
 end
 
@@ -708,20 +1018,20 @@ local function toggleScan()
     scanning = not scanning
     if scanning then
         scanButton.Text = "SCANNING..."
-        scanButton.BackgroundColor3 = Color3.fromRGB(85, 45, 125)
+        scanButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
         scanButton.BackgroundTransparency = 0.1
-        statusDot.BackgroundColor3 = Color3.fromRGB(170, 80, 240)
+        statusDot.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
         buffer = {}
         updatePreview()
-        print("[MoonSniper] Scanning started.")
+        print("[KurvaaHub] Scanning started.")
     else
         scanButton.Text = "START SCAN"
-        scanButton.BackgroundColor3 = Color3.fromRGB(38, 25, 55)
+        scanButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
         scanButton.BackgroundTransparency = 0.1
-        statusDot.BackgroundColor3 = Color3.fromRGB(150, 70, 220)
+        statusDot.BackgroundColor3 = Color3.fromRGB(180, 180, 180)
         buffer = {}
         updatePreview()
-        print("[MoonSniper] Scanning stopped.")
+        print("[KurvaaHub] Scanning stopped.")
     end
 end
 
@@ -740,7 +1050,7 @@ local function manualRedeem()
     local code = previewBox.Text
     if code and code ~= "" then
         typeAndSubmitCode(code)
-        print("[MoonSniper] Manually redeemed: " .. code)
+        print("[KurvaaHub] Manually redeemed: " .. code)
         buffer = {}
         updatePreview()
     end
@@ -757,8 +1067,7 @@ if notifyRemote then
         onAnnouncement(txt)
     end)
 else
-    warn("[MoonSniper] No notify remote - announcements not captured.")
+    warn("[KurvaaHub] No notify remote - announcements not captured.")
 end
 
-print("[MoonSniper] Ready. Click 'START SCAN' to begin.")
-
+print("[KurvaaHub] Ready. Click 'START SCAN' to begin.")
